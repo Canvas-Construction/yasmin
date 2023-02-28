@@ -1,23 +1,10 @@
 cmake_minimum_required(VERSION 3.5)
 project(yasmin)
 
-# Default to C++14
-if(NOT CMAKE_CXX_STANDARD)
-  set(CMAKE_CXX_STANDARD 14)
-endif()
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
-
 # Find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(ament_cmake_python REQUIRED)
-find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
-
-# C++
-include_directories(include)
-include_directories(src)
+find_package(Boost COMPONENTS system REQUIRED)
 
 set(LIB ${CMAKE_PROJECT_NAME}_lib)
 set(SOURCES
@@ -27,15 +14,33 @@ set(SOURCES
   src/yasmin/state_machine.cpp
 )
 
-set(DEPENDENCIES
-    rclcpp
-)
-
 add_library(${LIB} STATIC ${SOURCES})
 
-ament_target_dependencies(${LIB} ${DEPENDENCIES})
+target_link_libraries(${LIB} 
+  PUBLIC 
+    Boost::boost 
+)
 
-install(TARGETS ${LIB}
+target_compile_features(${LIB} 
+  PUBLIC 
+    cxx_std_14
+)
+
+target_compile_options(${LIB} 
+  PUBLIC 
+    $<$<CXX_COMPILER_ID:MSVC>:/permissive- /W4 /MP>
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic>
+)
+
+target_include_directories(${LIB} 
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+install(
+  TARGETS ${LIB}
+  EXPORT ${LIB}
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
@@ -45,10 +50,7 @@ install(DIRECTORY include/
   DESTINATION include/
 )
 
-ament_export_include_directories(include)
-ament_export_libraries(${LIB})
-ament_export_dependencies(${DEPENDENCIES})
-
+ament_export_targets(${LIB} HAS_LIBRARY_TARGET)
 
 # Python
 ament_python_install_package(${PROJECT_NAME})
