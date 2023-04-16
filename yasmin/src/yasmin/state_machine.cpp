@@ -86,7 +86,7 @@ StateMachine::execute(std::shared_ptr<blackboard::Blackboard> blackboard) {
 
     // check outcome belongs to state
     if (std::find(state->get_outcomes().begin(), state->get_outcomes().end(),
-                  outcome) == this->outcomes.end()) {
+                  outcome) == state->get_outcomes().end()) {
       throw "Outcome (" + outcome + ") is not register in state " +
           this->current_state;
     }
