@@ -4,7 +4,7 @@ project(yasmin)
 # Find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclpy REQUIRED)
-find_package(Boost 1.80 COMPONENTS boost)
+find_package(Boost 1.80 COMPONENTS system)
 
 set(LIB ${CMAKE_PROJECT_NAME}_lib)
 set(SOURCES
