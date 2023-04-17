@@ -16,7 +16,7 @@ find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(yasmin REQUIRED)
 find_package(yasmin_interfaces REQUIRED)
-find_package(Boost 1.80 COMPONENTS boost)
+find_package(Boost 1.80 COMPONENTS system)
 
 # C++
 include_directories(include)
