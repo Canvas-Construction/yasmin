@@ -20,6 +20,7 @@ find_package(yasmin_ros REQUIRED)
 find_package(yasmin_viewer REQUIRED)
 find_package(simple_node REQUIRED)
 find_package(nav_msgs REQUIRED)
+find_package(Boost 1.80 COMPONENTS boost)
 
 # C++
 include_directories(include)
